@@ -1,6 +1,6 @@
 import { Router } from "express";
 import jwt from "jsonwebtoken";
-import { ACCESS_AGE, ACCESS_SECRET, REFRESH_AGE, REFRESH_SECRET } from "../config.js";
+import { ACCESS_AGE, ACCESS_PRIVATE_KEY, REFRESH_AGE, REFRESH_SECRET } from "../config.js";
 import { createClient } from "redis";
 import { fakeData, users } from "../fakeDB.js";
 import authMW from "../middlewares/authMW.js";
@@ -35,7 +35,7 @@ router.post("/login", async (req, res) => {
     const refreshToken = jwt.sign(payload, REFRESH_SECRET, { expiresIn: REFRESH_AGE });
     await redisClient.setEx(refreshToken, REFRESH_AGE, payload.loginDate.toString())
 
-    const accessToken = jwt.sign(payload, ACCESS_SECRET, { expiresIn: ACCESS_AGE });
+    const accessToken = jwt.sign(payload, ACCESS_PRIVATE_KEY, { algorithm:"RS256", expiresIn: ACCESS_AGE });
 
     return res.send({ accessToken, refreshToken });
 
@@ -61,7 +61,7 @@ router.post("/refresh", (req, res) => {
             joinDate: payload.joinDate
         }
 
-        const accessToken = jwt.sign(user, ACCESS_SECRET, { expiresIn: ACCESS_AGE });
+        const accessToken = jwt.sign(user, ACCESS_PRIVATE_KEY, { algorithm: "RS256", expiresIn: ACCESS_AGE });
         return res.send({ accessToken });
     })
 })
