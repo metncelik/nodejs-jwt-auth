@@ -1,4 +1,4 @@
-# NodeJS JWT Authentication with Symetric Encryption 
+# NodeJS JWT Authentication with Asymetric Encryption 
 
 ## Create Private Key
 ```
