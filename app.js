@@ -9,9 +9,8 @@ app.use(bp.json());
 app.use(bp.urlencoded({ extended: true, type: "application/json"}));
 
 app.get("/", (req, res) => {
-    res.send({ "message": "server is live" });
-}
-);
+    res.send({ message: "server is live" });
+});
 
 app.use("/auth", authRouter);
 
